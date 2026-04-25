@@ -1,0 +1,11 @@
+Nama : Joannes De Britto Luther
+NIM : 2510514024
+Kelas :  A
+
+Nilai parameter :
+K = 5
+N = 24
+a = 2
+b = 2
+Derajat = 70
+alpha = 0,003
