@@ -1,64 +1,50 @@
 % ===============================================================
 % UTS Matematika Sains Data - Semester Genap 2025/2026
-% Soal 4 - Analisis Fasor Kompleks dan Akar Kubik
+% Soal 4 - Perbaikan Visualisasi Akar Kubik
 % ---------------------------------------------------------------
 % Nama    : Joannes De Britto Luther
 % NIM     : 2510514024
-% Parameter: a=2, b=2, theta0=70
+% Parameter: theta0 = 70
 % Tanggal : 2026-04-26
 % ===============================================================
 
 clc; clear; close all;
 
 %% Parameter
-a = 2; b = 2; theta0 = 70; % dalam derajat
-
-%% --- BAGIAN (b): Verifikasi Operasi Kompleks ---
-
-z1 = (a+2) + (b+1)*1i; % 4 + 3i
-z2 = (b+1) - (a+2)*1i; % 3 - 4i
-
-% Operasi Kompleks
-penjumlahan = z1 + z2;
-perkalian   = z1 * z2;
-pembagian   = z1 / z2;
-selisih_abs = abs(z1 - z2);
-
-fprintf('--- Verifikasi Soal 4b ---\n');
-fprintf('z1 + z2       : %s\n', char(penjumlahan));
-fprintf('z1 * z2       : %s\n', char(perkalian));
-fprintf('z1 / z2       : %s\n', char(pembagian));
-fprintf('|z1 - z2|     : %.4f\n\n', selisih_abs);
-
-%% --- BAGIAN (e): Plot Akar Kubik di Bidang Argand ---
-
-% 1. Mencari 3 akar kubik dari w = 8 * cis(70 deg)
-% Rumus: wk = r^(1/3) * cis((theta + 360*k)/3) untuk k=0,1,2
+theta0 = 70; 
 r_w = 8;
-theta_rad = deg2rad(theta0);
-r_root = r_w^(1/3); % Hasilnya adalah 2
+r_root = r_w^(1/3); % Hasilnya 2
 
+%% Hitung Akar Kubik
 k = 0:2;
-phi_k = (theta_rad + 2*pi*k) / 3; % Sudut akar-akar dalam radian
+theta_rad = deg2rad(theta0);
+phi_k = (theta_rad + 2*pi*k) / 3; 
 akar_akar = r_root * (cos(phi_k) + 1i*sin(phi_k));
 
-% 2. Visualisasi Bidang Argand
+%% Visualisasi (Solusi Anti-Error)
 figure('Color', 'w');
-polarplot(phi_k, repmat(r_root, 1, 3), 'ro', 'MarkerSize', 10, 'LineWidth', 2);
+
+% Menggunakan polarplot untuk titik akar dan garis segitiga
+% Kita tambahkan data pertama di akhir agar garisnya menyambung (loop)
+phi_plot = [phi_k, phi_k(1)];
+r_plot = [repmat(r_root, 1, 3), r_root];
+
+polarplot(phi_plot, r_plot, '-ro', 'LineWidth', 2, 'MarkerFaceColor', 'r');
 hold on;
 
-% Menggunakan compass untuk menunjukkan vektor fasor
-compass(akar_akar, 'r'); 
+% Menggambar vektor dari pusat (0,0) ke setiap akar secara manual
+% Ini menggantikan fungsi 'compass' yang sering menyebabkan error PolarAxes
+for m = 1:3
+    polarplot([0 phi_k(m)], [0 r_root], 'r', 'LineWidth', 1.5);
+end
 
-% Menambahkan garis antar akar untuk membuktikan segitiga sama sisi
-phi_loop = [phi_k, phi_k(1)]; % Menutup poligon
-akar_loop = [akar_akar, akar_akar(1)];
-plot(akar_loop, 'b--', 'LineWidth', 1.5);
-
-title(['Plot Akar Kubik w - NIM: ', '2510514024']);
+title(['Plot Akar Kubik w (r=2) - NIM: ', '2510514024']);
+ax = gca;
+ax.ThetaZeroLocation = 'right'; % Memastikan 0 derajat di sebelah kanan
 grid on;
 
-% Menampilkan nilai akar di Command Window
+%% Tampilkan Hasil di Command Window
+fprintf('--- Hasil Akar-Akar Kubik (Soal 4d) ---\n');
 for m = 1:3
     fprintf('Akar ke-%d: %.4f + %.4fi\n', m, real(akar_akar(m)), imag(akar_akar(m)));
 end
